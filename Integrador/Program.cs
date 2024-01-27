@@ -1,5 +1,6 @@
 using Integrador.Logica.ServiceUser;
 using Integrador.Persistencia;
+using Integrador.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddControllers();
 
-// Configure services.
-builder.Services.AddScoped<ListarUsuariosService>();
+// MIS SERVICIO
+/************************************************************/
+builder.Services.AddScoped<ListarUsuariosService>();    
+builder.Services.AddScoped<InsertarUsuarioService>();
+builder.Services.AddScoped<UpdateUserService>();
+/************************************************************/
 
 // Configuración de la conexión de base de datos
 builder.Services.AddDbContext<DbIntegradorContext>(options =>

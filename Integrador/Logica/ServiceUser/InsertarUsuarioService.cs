@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Integrador.DTO;
 using Integrador.Models;
 using Integrador.Persistencia;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace Integrador.Services
 {
@@ -14,27 +17,22 @@ namespace Integrador.Services
             _context = context;
         }
 
-        public async Task<bool> InsertarUsuario(RegistroUsersDTO usuarioDTO)
+        public async Task<bool> InsertarUsuario(InsertarUserDTO usuarioDTO)
         {
             try
             {
-                // Crear una instancia de Usuario utilizando los datos del DTO
-                var nuevoUsuario = new Registro
-                {
-                    Nombre = usuarioDTO.Nombre,
-                    Apellido = usuarioDTO.Apellido,
-                    TipoDocumento = usuarioDTO.TipoDocumento,
-                    Dni = usuarioDTO.Dni,
-                    Correo = usuarioDTO.Correo,
-                    Psw = usuarioDTO.Psw,
-                    Celular = usuarioDTO.Celular
-                };
-
-                // Agregar el nuevo usuario al contexto
-                _context.Registros.Add(nuevoUsuario);
-
-                // Guardar los cambios en la base de datos
-                await _context.SaveChangesAsync();
+                // Llamar al procedimiento almacenado para insertar un nuevo usuario
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC sp_insertarUsuario @nombre, @apellido, @tipoDocumento, @dni, @correo, @psw, @celular, @estado",
+                    new SqlParameter("@nombre", usuarioDTO.Nombre),
+                    new SqlParameter("@apellido", usuarioDTO.Apellido),
+                    new SqlParameter("@tipoDocumento", usuarioDTO.TipoDocumento),
+                    new SqlParameter("@dni", usuarioDTO.Dni),
+                    new SqlParameter("@correo", usuarioDTO.Correo),
+                    new SqlParameter("@psw", usuarioDTO.Psw),
+                    new SqlParameter("@celular", usuarioDTO.Celular),
+                    new SqlParameter("@estado", usuarioDTO.Estado)
+                );
 
                 return true;
             }

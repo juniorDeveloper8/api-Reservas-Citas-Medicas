@@ -16,11 +16,11 @@ namespace Integrador.Logica.ServiceUser
             _context = context;
         }
 
-        public async Task<IEnumerable<RegistroUsersDTO>> ListarUsuarios()
+        public async Task<IEnumerable<ListUsersDTO>> ListarUsuarios()
         {
             try
             {
-                var usuarios = new List<RegistroUsersDTO>();
+                var usuarios = new List<ListUsersDTO>();
 
                 using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
@@ -34,7 +34,7 @@ namespace Integrador.Logica.ServiceUser
                     {
                         while (await reader.ReadAsync())
                         {
-                            var usuario = new RegistroUsersDTO
+                            var usuario = new ListUsersDTO
                             {
                                 Nombre = reader.GetString(reader.GetOrdinal("nombre")),
                                 Apellido = reader.GetString(reader.GetOrdinal("apellido")),
@@ -59,11 +59,11 @@ namespace Integrador.Logica.ServiceUser
             }
         }
         //obtener por id
-        public async Task<RegistroUsersDTO> ObtenerRegistroPorId(int id)
+        public async Task<ListUsersDTO> ObtenerRegistroPorId(int id)
         {
             try
             {
-                RegistroUsersDTO registro = null; // Cambiar el tipo de la variable registro
+                ListUsersDTO registro = null; // Cambiar el tipo de la variable registro
 
                 using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
@@ -77,7 +77,7 @@ namespace Integrador.Logica.ServiceUser
                     {
                         if (await reader.ReadAsync())
                         {
-                            registro = new RegistroUsersDTO // Cambiar el tipo de objeto
+                            registro = new ListUsersDTO // Cambiar el tipo de objeto
                             {
                                 Nombre = reader.GetString(reader.GetOrdinal("nombre")),
                                 Apellido = reader.GetString(reader.GetOrdinal("apellido")),

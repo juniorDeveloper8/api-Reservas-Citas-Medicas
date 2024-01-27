@@ -1,6 +1,6 @@
 ﻿namespace Integrador.DTO
 {
-    public class RegistroUsersDTO
+    public class InsertarUserDTO
     {
         public string Nombre { get; set; } = null!;
 
@@ -16,5 +16,6 @@
 
         public string Celular { get; set; } = null!;
 
+        public byte Estado { get; set; }
     }
 }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Integrador.Models;
-using Integrador.Persistencia;
+﻿using Integrador.DTO;
 using Integrador.Logica.ServiceUser;
-using Integrador.DTO;
+using Integrador.Models;
+using Integrador.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Integrador.Controllers
 {
@@ -17,15 +11,18 @@ namespace Integrador.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly ListarUsuariosService _listarUsuariosService;
-
-        public UsuarioController(ListarUsuariosService listarUsuariosService)
+        private readonly InsertarUsuarioService _insertarUsuarioService;
+        private readonly UpdateUserService _updateUser;
+        public UsuarioController(ListarUsuariosService listarUsuariosService, InsertarUsuarioService insertarUsuarioService, UpdateUserService updateUser)
         {
             _listarUsuariosService = listarUsuariosService;
+            _insertarUsuarioService = insertarUsuarioService;
+            _updateUser = updateUser;
         }
 
         // GET: api/Usuario
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RegistroUsersDTO>>> GetRegistros()
+        public async Task<ActionResult<IEnumerable<ListUsersDTO>>> GetRegistros()
         {
             var registros = await _listarUsuariosService.ListarUsuarios();
 
@@ -39,7 +36,7 @@ namespace Integrador.Controllers
 
         // GET: api/Usuario/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<RegistroUsersDTO>> GetUsuario(int id)
+        public async Task<ActionResult<ListUsersDTO>> GetUsuario(int id)
         {
             var usuario = await _listarUsuariosService.ObtenerRegistroPorId(id);
 
@@ -51,58 +48,44 @@ namespace Integrador.Controllers
             return Ok(usuario);
         }
 
+        // POST: api/Usuario
+        [HttpPost]
+        public async Task<ActionResult<bool>> PostUsuario(InsertarUserDTO usuarioDTO)
+        {
+            var resultado = await _insertarUsuarioService.InsertarUsuario(usuarioDTO);
 
+            if (!resultado)
+            {
+                return Problem("Error al insertar el usuario en la base de datos.");
+            }
+
+            return Ok(true);
+        }
+
+        // PUT: api/Usuario/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUsuario(int id, ListUsersDTO usuarioDTO)
+        {
+            var resultado = await _updateUser.ActualizarUsuario(id, usuarioDTO);
+
+            if (resultado.Equals("Usuario actualizado correctamente."))
+            {
+                return NoContent();
+            }
+            else if (resultado.Equals("No se encontró ningún usuario con el ID especificado."))
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Problem(resultado);
+            }
+        }
     }
-
-
 }
 
 
-//        // PUT: api/Registroes/5
-//        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-//        [HttpPut("{id}")]
-//        public async Task<IActionResult> PutRegistro(int id, Registro registro)
-//        {
-//            if (id != registro.Id)
-//            {
-//                return BadRequest();
-//            }
 
-//            _context.Entry(registro).State = EntityState.Modified;
-
-//            try
-//            {
-//                await _context.SaveChangesAsync();
-//            }
-//            catch (DbUpdateConcurrencyException)
-//            {
-//                if (!RegistroExists(id))
-//                {
-//                    return NotFound();
-//                }
-//                else
-//                {
-//                    throw;
-//                }
-//            }
-
-//            return NoContent();
-//        }
-
-//        // POST: api/Registroes
-//        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-//        [HttpPost]
-//        public async Task<ActionResult<Registro>> PostRegistro(Registro registro)
-//        {
-//          if (_context.Registros == null)
-//          {
-//              return Problem("Entity set 'DbIntegradorContext.Registros'  is null.");
-//          }
-//            _context.Registros.Add(registro);
-//            await _context.SaveChangesAsync();
-
-//            return CreatedAtAction("GetRegistro", new { id = registro.Id }, registro);
-//        }
 
 //        // DELETE: api/Registroes/5
 //        [HttpDelete("{id}")]
