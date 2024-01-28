@@ -5,19 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Integrador.Logica.UserServices
 {
-    public class ListUsersService
+    public class UserServices
     {
         private readonly DbIntegradorContext _context;
 
-        public ListUsersService(DbIntegradorContext context)
+        public UserServices(DbIntegradorContext context)
         {
             _context = context;
         }
 
-        public List<GeneralUserDTO> ListarUsuarios()
+        public async Task<List<GeneralUserDTO>> ListarUsuarios()
         {
             // Llama al procedimiento almacenado y mapea los resultados a entidades Usuario
-            List<Usuario> usuarios = _context.Usuarios.FromSqlInterpolated($"EXEC ListarUsuarios").ToList();
+            List<Usuario> usuarios = await _context.Usuarios.FromSqlInterpolated($"EXEC ListarUsuarios").ToListAsync();
 
             // Convierte las entidades Usuario a DTOs GeneralUserDTO
             List<GeneralUserDTO> usuariosDTO = new List<GeneralUserDTO>();
@@ -39,12 +39,14 @@ namespace Integrador.Logica.UserServices
 
             return usuariosDTO;
         }
+
         //obtener el usurio por id
-        public GeneralUserDTO GetUserById(int userId)
+        public USerDTOID GetUserById(int userId)
         {
             // Llama al procedimiento almacenado y filtra por el ID del usuario
             var usuario = _context.Usuarios
                 .FromSqlInterpolated($"EXEC ListarUsuarioPorID {userId}")
+                .ToList()  // Forzar ejecución en el lado del cliente
                 .FirstOrDefault();
 
             // Si no se encuentra ningún usuario con ese ID, devuelve null
@@ -52,7 +54,7 @@ namespace Integrador.Logica.UserServices
                 return null;
 
             // Convierte la entidad Usuario a un DTO GeneralUserDTO
-            var usuarioDTO = new GeneralUserDTO
+            var usuarioDTO = new USerDTOID
             {
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
@@ -66,6 +68,7 @@ namespace Integrador.Logica.UserServices
 
             return usuarioDTO;
         }
+
         // listar por cedula o nombre 
         public List<GeneralUserDTO> GetUsersByNameAndIdNumber(string nombre, string cedula)
         {

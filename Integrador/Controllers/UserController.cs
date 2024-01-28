@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Integrador.DTO.UserDTO;
+using Integrador.Logica.UserServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Integrador.Models;
-using Integrador.Persistencia;
 
 namespace Integrador.Controllers
 {
@@ -14,111 +8,77 @@ namespace Integrador.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly DbIntegradorContext _context;
+        private readonly UserServices _userServices;
+        private readonly InsertUserService _insertUserService;
+        private readonly UpdateUserService _updateUserService;
 
-        public UserController(DbIntegradorContext context)
+        public UserController(UserServices userServices, InsertUserService insertUserService, UpdateUserService updateUserService)
         {
-            _context = context;
+            _userServices = userServices;
+            _insertUserService = insertUserService;
+            _updateUserService = updateUserService;
         }
 
-        // GET: api/User
+        // GET: api/Usuario
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+        public async Task<ActionResult<IEnumerable<GeneralUserDTO>>> ListarUsuarios()
         {
-          if (_context.Usuarios == null)
-          {
-              return NotFound();
-          }
-            return await _context.Usuarios.ToListAsync();
+            var usuarios = await _userServices.ListarUsuarios();
+
+            if (usuarios == null || usuarios.Count == 0)
+            {
+                return NotFound("No se encontraron usuarios.");
+            }
+
+            return Ok(usuarios);
         }
 
-        // GET: api/User/5
+        // GET: api/Usuario/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        public async Task<ActionResult<GeneralUserDTO>> GetUserById(int id)
         {
-          if (_context.Usuarios == null)
-          {
-              return NotFound();
-          }
-            var usuario = await _context.Usuarios.FindAsync(id);
-
+            var usuario = _userServices.GetUserById(id);
             if (usuario == null)
             {
                 return NotFound();
             }
-
-            return usuario;
+            return Ok(usuario);
         }
 
-        // PUT: api/User/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
+        // buscar usuario por cedula o nombre
+        [HttpGet("buscar")]
+        public async Task<ActionResult<IEnumerable<GeneralUserDTO>>> GetUsersByNameAndIdNumber(string nombre, string cedula)
         {
-            if (id != usuario.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(usuario).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsuarioExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var usuarios = _userServices.GetUsersByNameAndIdNumber(nombre, cedula);
+            return Ok(usuarios);
         }
-
-        // POST: api/User
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/Usuario
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public async Task<ActionResult> InsertarUsuario(GeneralUserDTO usuarioDTO)
         {
-          if (_context.Usuarios == null)
-          {
-              return Problem("Entity set 'DbIntegradorContext.Usuarios'  is null.");
-          }
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
-        }
-
-        // DELETE: api/User/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsuario(int id)
-        {
-            if (_context.Usuarios == null)
+            var exito = await _insertUserService.InsertarUsuario(usuarioDTO);
+            if (exito)
             {
-                return NotFound();
+                return Ok("Usuario insertado correctamente.");
             }
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
+            else
             {
-                return NotFound();
+                return StatusCode(500, "Error al insertar usuario.");
             }
-
-            _context.Usuarios.Remove(usuario);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
-
-        private bool UsuarioExists(int id)
+        // PUT: api/Usuario/{id}
+        [HttpPut("{id}")]
+        public async Task<ActionResult> ActualizarUsuario(int id, USerDTOID usuarioDTO)
         {
-            return (_context.Usuarios?.Any(e => e.Id == id)).GetValueOrDefault();
+            var resultado = await _updateUserService.ActualizarUsuario(id, usuarioDTO);
+            if (resultado == "Success")
+            {
+                return Ok("Usuario actualizado correctamente.");
+            }
+            else
+            {
+                return StatusCode(500, resultado);
+            }
         }
     }
 }

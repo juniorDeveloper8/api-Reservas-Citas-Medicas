@@ -3,13 +3,13 @@ using Integrador.Persistencia;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
-namespace Integrador.Services
+namespace Integrador.Logica.UserServices
 {
-    public class InsertarUsuarioService
+    public class InsertUserService
     {
         private readonly DbIntegradorContext _context;
 
-        public InsertarUsuarioService(DbIntegradorContext context)
+        public InsertUserService(DbIntegradorContext context)
         {
             _context = context;
         }
