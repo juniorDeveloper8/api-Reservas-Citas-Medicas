@@ -15,11 +15,7 @@ public partial class Clinica
 
     public string Ruc { get; set; } = null!;
 
-    public int DoId { get; set; }
+    public virtual ICollection<ClinicaUsuario> ClinicaUsuarios { get; set; } = new List<ClinicaUsuario>();
 
-    public int TiId { get; set; }
-
-    public virtual Médico Do { get; set; } = null!;
-
-    public virtual TiposAtencion Ti { get; set; } = null!;
+    public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 }

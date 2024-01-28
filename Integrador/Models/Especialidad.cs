@@ -7,17 +7,17 @@ public partial class Especialidad
 {
     public int Id { get; set; }
 
-    public string? ENomre { get; set; }
+    public string ENomre { get; set; } = null!;
 
-    public string? EDecripcion { get; set; }
+    public string EDecripcion { get; set; } = null!;
 
-    public string? EArea { get; set; }
+    public string EArea { get; set; } = null!;
 
-    public string? ECodigo { get; set; }
+    public string ECodigo { get; set; } = null!;
 
-    public string? EDescripcion { get; set; }
+    public string EDescripcion { get; set; } = null!;
 
-    public int DoId { get; set; }
+    public virtual ICollection<DotorEspecialidad> DotorEspecialidads { get; set; } = new List<DotorEspecialidad>();
 
-    public virtual Médico Do { get; set; } = null!;
+    public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 }

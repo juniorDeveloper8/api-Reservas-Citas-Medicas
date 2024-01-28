@@ -9,23 +9,27 @@ public partial class Reserva
 
     public DateTime Fecha { get; set; }
 
-    public string Especialidad { get; set; } = null!;
-
-    public string DesPa { get; set; } = null!;
+    public string Sintomas { get; set; } = null!;
 
     public byte Estado { get; set; }
 
     public int UsId { get; set; }
 
-    public int? DoId { get; set; }
+    public int DocId { get; set; }
 
-    public int? SuId { get; set; }
+    public int AtId { get; set; }
 
-    public virtual Médico? Do { get; set; }
+    public int CliId { get; set; }
 
-    public virtual ICollection<ReservasDoctor> ReservasDoctors { get; set; } = new List<ReservasDoctor>();
+    public int EspecialidadId { get; set; }
 
-    public virtual ICollection<TipoAtencionReserva> TipoAtencionReservas { get; set; } = new List<TipoAtencionReserva>();
+    public virtual TipoAtencion At { get; set; } = null!;
+
+    public virtual Clinica Cli { get; set; } = null!;
+
+    public virtual Usuario Doc { get; set; } = null!;
+
+    public virtual Especialidad Especialidad { get; set; } = null!;
 
     public virtual Usuario Us { get; set; } = null!;
 }

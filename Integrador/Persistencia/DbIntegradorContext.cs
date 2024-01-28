@@ -18,19 +18,21 @@ public partial class DbIntegradorContext : DbContext
 
     public virtual DbSet<Clinica> Clinicas { get; set; }
 
+    public virtual DbSet<ClinicaUsuario> ClinicaUsuarios { get; set; }
+
+    public virtual DbSet<DotorEspecialidad> DotorEspecialidads { get; set; }
+
     public virtual DbSet<Especialidad> Especialidads { get; set; }
 
-    public virtual DbSet<Médico> Médicos { get; set; }
+    public virtual DbSet<Ficha> Fichas { get; set; }
 
-    public virtual DbSet<Registro> Registros { get; set; }
+    public virtual DbSet<Log> Logs { get; set; }
 
     public virtual DbSet<Reserva> Reservas { get; set; }
 
-    public virtual DbSet<ReservasDoctor> ReservasDoctors { get; set; }
+    public virtual DbSet<Rol> Rols { get; set; }
 
-    public virtual DbSet<TipoAtencionReserva> TipoAtencionReservas { get; set; }
-
-    public virtual DbSet<TiposAtencion> TiposAtencions { get; set; }
+    public virtual DbSet<TipoAtencion> TipoAtencions { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
@@ -42,11 +44,13 @@ public partial class DbIntegradorContext : DbContext
     {
         modelBuilder.Entity<Clinica>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Clinicas__3213E83F76ADAA03");
+            entity.HasKey(e => e.Id).HasName("PK__Clinica__3213E83FB5130CA1");
 
-            entity.HasIndex(e => e.ClinicaNombre, "UQ__Clinicas__5AB1F0407E597289").IsUnique();
+            entity.ToTable("Clinica");
 
-            entity.HasIndex(e => e.Ruc, "UQ__Clinicas__C2B74E618F8F16DF").IsUnique();
+            entity.HasIndex(e => e.ClinicaNombre, "UQ__Clinica__5AB1F040A5E146F1").IsUnique();
+
+            entity.HasIndex(e => e.Ruc, "UQ__Clinica__C2B74E612FF8E526").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ClinicaNombre)
@@ -61,32 +65,61 @@ public partial class DbIntegradorContext : DbContext
                 .HasMaxLength(45)
                 .IsUnicode(false)
                 .HasColumnName("direccion");
-            entity.Property(e => e.DoId).HasColumnName("do_id");
             entity.Property(e => e.Ruc)
                 .HasMaxLength(45)
                 .IsUnicode(false)
                 .HasColumnName("ruc");
-            entity.Property(e => e.TiId).HasColumnName("ti_id");
+        });
 
-            entity.HasOne(d => d.Do).WithMany(p => p.Clinicas)
-                .HasForeignKey(d => d.DoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Clinicas__do_id__5AEE82B9");
+        modelBuilder.Entity<ClinicaUsuario>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Clinica___3213E83FFF06D19B");
 
-            entity.HasOne(d => d.Ti).WithMany(p => p.Clinicas)
-                .HasForeignKey(d => d.TiId)
+            entity.ToTable("Clinica_Usuario");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Clinica).HasColumnName("clinica");
+            entity.Property(e => e.Usuario).HasColumnName("usuario");
+
+            entity.HasOne(d => d.ClinicaNavigation).WithMany(p => p.ClinicaUsuarios)
+                .HasForeignKey(d => d.Clinica)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Clinicas__ti_id__5BE2A6F2");
+                .HasConstraintName("FK__Clinica_U__clini__6A30C649");
+
+            entity.HasOne(d => d.UsuarioNavigation).WithMany(p => p.ClinicaUsuarios)
+                .HasForeignKey(d => d.Usuario)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Clinica_U__usuar__693CA210");
+        });
+
+        modelBuilder.Entity<DotorEspecialidad>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__dotor_es__3213E83FCC20FFF2");
+
+            entity.ToTable("dotor_especialidad");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.DocId).HasColumnName("doc_id");
+            entity.Property(e => e.EspecialidadId).HasColumnName("especialidad_id");
+
+            entity.HasOne(d => d.Doc).WithMany(p => p.DotorEspecialidads)
+                .HasForeignKey(d => d.DocId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__dotor_esp__doc_i__6754599E");
+
+            entity.HasOne(d => d.Especialidad).WithMany(p => p.DotorEspecialidads)
+                .HasForeignKey(d => d.EspecialidadId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__dotor_esp__espec__68487DD7");
         });
 
         modelBuilder.Entity<Especialidad>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__especial__3213E83F717A241A");
+            entity.HasKey(e => e.Id).HasName("PK__especial__3213E83F7073514D");
 
             entity.ToTable("especialidad");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.DoId).HasColumnName("do_id");
             entity.Property(e => e.EArea)
                 .HasMaxLength(45)
                 .IsUnicode(false)
@@ -107,54 +140,156 @@ public partial class DbIntegradorContext : DbContext
                 .HasMaxLength(45)
                 .IsUnicode(false)
                 .HasColumnName("e_nomre");
-
-            entity.HasOne(d => d.Do).WithMany(p => p.Especialidads)
-                .HasForeignKey(d => d.DoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__especiali__do_id__628FA481");
         });
 
-        modelBuilder.Entity<Médico>(entity =>
+        modelBuilder.Entity<Ficha>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Médicos__3213E83F3D4CECA1");
+            entity.HasKey(e => e.Id).HasName("PK__ficha__3213E83FD5DD1904");
+
+            entity.ToTable("ficha");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.DApellido)
-                .HasMaxLength(45)
-                .IsUnicode(false)
-                .HasColumnName("d_apellido");
-            entity.Property(e => e.DArea)
-                .HasMaxLength(45)
-                .IsUnicode(false)
-                .HasColumnName("d_area");
-            entity.Property(e => e.DDni)
-                .HasMaxLength(45)
-                .IsUnicode(false)
-                .HasColumnName("d_dni");
-            entity.Property(e => e.DNombre)
-                .HasMaxLength(45)
-                .IsUnicode(false)
-                .HasColumnName("d_nombre");
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(45)
                 .IsUnicode(false)
                 .HasColumnName("descripcion");
-            entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.DocId).HasColumnName("doc_id");
+            entity.Property(e => e.Fecha)
+                .HasColumnType("datetime")
+                .HasColumnName("fecha");
+            entity.Property(e => e.Hora)
+                .HasColumnType("datetime")
+                .HasColumnName("hora");
+            entity.Property(e => e.UsuId).HasColumnName("usu_id");
+
+            entity.HasOne(d => d.Doc).WithMany(p => p.FichaDocs)
+                .HasForeignKey(d => d.DocId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__ficha__doc_id__66603565");
+
+            entity.HasOne(d => d.Usu).WithMany(p => p.FichaUsus)
+                .HasForeignKey(d => d.UsuId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__ficha__usu_id__656C112C");
         });
 
-        modelBuilder.Entity<Registro>(entity =>
+        modelBuilder.Entity<Log>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__registro__3213E83FFC75A6B9");
+            entity.HasKey(e => e.Id).HasName("PK__logs__3213E83F9D1C5EF1");
 
-            entity.ToTable("registros");
+            entity.ToTable("logs");
 
-            entity.HasIndex(e => e.Correo, "UQ__registro__2A586E0BAE74C058").IsUnique();
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.Intentos).HasColumnName("intentos");
+            entity.Property(e => e.Usuario).HasColumnName("usuario");
 
-            entity.HasIndex(e => e.Celular, "UQ__registro__2E4973E7999F8750").IsUnique();
+            entity.HasOne(d => d.UsuarioNavigation).WithMany(p => p.Logs)
+                .HasForeignKey(d => d.Usuario)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__logs__usuario__6C190EBB");
+        });
 
-            entity.HasIndex(e => e.Dni, "UQ__registro__D87608A7AB65E62C").IsUnique();
+        modelBuilder.Entity<Reserva>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__reserva__3213E83F81AD8987");
 
-            entity.HasIndex(e => e.Psw, "UQ__registro__DD37A9EEFAD6F5A2").IsUnique();
+            entity.ToTable("reserva");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AtId).HasColumnName("at_id");
+            entity.Property(e => e.CliId).HasColumnName("cli_id");
+            entity.Property(e => e.DocId).HasColumnName("doc_id");
+            entity.Property(e => e.EspecialidadId).HasColumnName("especialidad_id");
+            entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.Fecha)
+                .HasColumnType("datetime")
+                .HasColumnName("fecha");
+            entity.Property(e => e.Sintomas)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("sintomas");
+            entity.Property(e => e.UsId).HasColumnName("us_id");
+
+            entity.HasOne(d => d.At).WithMany(p => p.Reservas)
+                .HasForeignKey(d => d.AtId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__reserva__at_id__628FA481");
+
+            entity.HasOne(d => d.Cli).WithMany(p => p.Reservas)
+                .HasForeignKey(d => d.CliId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__reserva__cli_id__6383C8BA");
+
+            entity.HasOne(d => d.Doc).WithMany(p => p.ReservaDocs)
+                .HasForeignKey(d => d.DocId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__reserva__doc_id__619B8048");
+
+            entity.HasOne(d => d.Especialidad).WithMany(p => p.Reservas)
+                .HasForeignKey(d => d.EspecialidadId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__reserva__especia__6477ECF3");
+
+            entity.HasOne(d => d.Us).WithMany(p => p.ReservaUs)
+                .HasForeignKey(d => d.UsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__reserva__us_id__60A75C0F");
+        });
+
+        modelBuilder.Entity<Rol>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__rol__3213E83FF8EDDE61");
+
+            entity.ToTable("rol");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Rol1)
+                .HasMaxLength(45)
+                .IsUnicode(false)
+                .HasColumnName("rol");
+            entity.Property(e => e.Usuario).HasColumnName("usuario");
+
+            entity.HasOne(d => d.UsuarioNavigation).WithMany(p => p.Rols)
+                .HasForeignKey(d => d.Usuario)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__rol__usuario__6B24EA82");
+        });
+
+        modelBuilder.Entity<TipoAtencion>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__TipoAten__3213E83F168633DA");
+
+            entity.ToTable("TipoAtencion");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.TAtencionLocal)
+                .HasMaxLength(45)
+                .IsUnicode(false)
+                .HasColumnName("t_atencionLocal");
+            entity.Property(e => e.TOnline)
+                .HasMaxLength(45)
+                .IsUnicode(false)
+                .HasColumnName("t_online");
+            entity.Property(e => e.TPrecencial)
+                .HasMaxLength(45)
+                .IsUnicode(false)
+                .HasColumnName("t_precencial");
+        });
+
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__usuario__3213E83F52576278");
+
+            entity.ToTable("usuario");
+
+            entity.HasIndex(e => e.Correo, "UQ__usuario__2A586E0B786E5643").IsUnique();
+
+            entity.HasIndex(e => e.Celular, "UQ__usuario__2E4973E7347869AA").IsUnique();
+
+            entity.HasIndex(e => e.Dni, "UQ__usuario__D87608A74EA4F4E9").IsUnique();
+
+            entity.HasIndex(e => e.Username, "UQ__usuario__F3DBC57298F37574").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Apellido)
@@ -186,117 +321,10 @@ public partial class DbIntegradorContext : DbContext
                 .HasMaxLength(45)
                 .IsUnicode(false)
                 .HasColumnName("tipoDocumento");
-        });
-
-        modelBuilder.Entity<Reserva>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__reservas__3213E83F52E8487B");
-
-            entity.ToTable("reservas");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.DesPa)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("des_pa");
-            entity.Property(e => e.DoId).HasColumnName("do_id");
-            entity.Property(e => e.Especialidad)
+            entity.Property(e => e.Username)
                 .HasMaxLength(45)
                 .IsUnicode(false)
-                .HasColumnName("especialidad");
-            entity.Property(e => e.Estado).HasColumnName("estado");
-            entity.Property(e => e.Fecha)
-                .HasColumnType("datetime")
-                .HasColumnName("fecha");
-            entity.Property(e => e.SuId).HasColumnName("su_id");
-            entity.Property(e => e.UsId).HasColumnName("us_id");
-
-            entity.HasOne(d => d.Do).WithMany(p => p.Reservas)
-                .HasForeignKey(d => d.DoId)
-                .HasConstraintName("FK_reservas_Medicos");
-
-            entity.HasOne(d => d.Us).WithMany(p => p.Reservas)
-                .HasForeignKey(d => d.UsId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__reservas__us_id__5629CD9C");
-        });
-
-        modelBuilder.Entity<ReservasDoctor>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__reservas__3213E83F15BD14C0");
-
-            entity.ToTable("reservasDoctor");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.DoId).HasColumnName("do_id");
-            entity.Property(e => e.ReserId).HasColumnName("reser_id");
-
-            entity.HasOne(d => d.Do).WithMany(p => p.ReservasDoctors)
-                .HasForeignKey(d => d.DoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__reservasD__do_id__5FB337D6");
-
-            entity.HasOne(d => d.Reser).WithMany(p => p.ReservasDoctors)
-                .HasForeignKey(d => d.ReserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__reservasD__reser__5EBF139D");
-        });
-
-        modelBuilder.Entity<TipoAtencionReserva>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__TipoAten__3213E83F478AA884");
-
-            entity.ToTable("TipoAtencion_Reservas");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ReseId).HasColumnName("rese_id");
-            entity.Property(e => e.TiId).HasColumnName("ti_id");
-
-            entity.HasOne(d => d.Rese).WithMany(p => p.TipoAtencionReservas)
-                .HasForeignKey(d => d.ReseId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__TipoAtenc__rese___66603565");
-
-            entity.HasOne(d => d.Ti).WithMany(p => p.TipoAtencionReservas)
-                .HasForeignKey(d => d.TiId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__TipoAtenc__ti_id__656C112C");
-        });
-
-        modelBuilder.Entity<TiposAtencion>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__TiposAte__3213E83F16942B69");
-
-            entity.ToTable("TiposAtencion");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.TAtencionLocal)
-                .HasMaxLength(45)
-                .IsUnicode(false)
-                .HasColumnName("t_atencionLocal");
-            entity.Property(e => e.TOnline)
-                .HasMaxLength(45)
-                .IsUnicode(false)
-                .HasColumnName("t_online");
-            entity.Property(e => e.TPrecencial)
-                .HasMaxLength(45)
-                .IsUnicode(false)
-                .HasColumnName("t_precencial");
-        });
-
-        modelBuilder.Entity<Usuario>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__usuario__3213E83FCCE4AE48");
-
-            entity.ToTable("usuario");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.ReId).HasColumnName("re_id");
-
-            entity.HasOne(d => d.Re).WithMany(p => p.Usuarios)
-                .HasForeignKey(d => d.ReId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__usuario__re_id__534D60F1");
+                .HasColumnName("username");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,24 +1,36 @@
-using Integrador.Logica.ServiceUser;
 using Integrador.Persistencia;
-using Integrador.Services;
 using Microsoft.EntityFrameworkCore;
+using Integrador.Logica.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Agregar servicios al contenedor.
 builder.Services.AddControllers();
 builder.Services.AddControllers();
 
-// MIS SERVICIO
-/************************************************************/
-builder.Services.AddScoped<ListarUsuariosService>();    
-builder.Services.AddScoped<InsertarUsuarioService>();
-builder.Services.AddScoped<UpdateUserService>();
-/************************************************************/
-
 // Configuración de la conexión de base de datos
 builder.Services.AddDbContext<DbIntegradorContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+/**CONFIGURACION DE CORS**/
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                      });
+});
+
+// MIS SERVICIO
+/************************************************************/
+builder.Services.AddScoped<UserServices>();
+builder.Services.AddScoped<InsertUserService>();
+builder.Services.AddScoped<UpdateUserService>();
+/************************************************************/
 
 // Añadir el servicio de documentación de Swagger
 builder.Services.AddEndpointsApiExplorer();

@@ -1,6 +1,6 @@
-﻿namespace Integrador.DTO
+﻿namespace Integrador.DTO.UserDTO
 {
-    public class InsertarUserDTO
+    public class GeneralUserDTO
     {
         public string Nombre { get; set; } = null!;
 
@@ -12,10 +12,10 @@
 
         public string Correo { get; set; } = null!;
 
+        public string Username { get; set; } = null!;
+
         public string Psw { get; set; } = null!;
 
         public string Celular { get; set; } = null!;
-
-        public byte Estado { get; set; }
     }
 }
