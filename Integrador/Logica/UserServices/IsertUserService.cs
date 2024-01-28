@@ -20,7 +20,7 @@ namespace Integrador.Logica.UserServices
             {
                 // Llamar al procedimiento almacenado para insertar un nuevo usuario
                 await _context.Database.ExecuteSqlRawAsync(
-                    "EXEC dbo.InsertarUsuario @nombre, @apellido, @tipoDocumento, @dni, @correo, @psw, @celular, @username",
+                    "EXEC dbo.InsertarUsuario @nombre, @apellido, @tipoDocumento, @dni, @correo, @username, @psw, @celular, @RolUser", // Agrega @RolUser a la cadena de SQL
                     new SqlParameter("@nombre", usuarioDTO.Nombre),
                     new SqlParameter("@apellido", usuarioDTO.Apellido),
                     new SqlParameter("@tipoDocumento", usuarioDTO.TipoDocumento),
@@ -28,7 +28,8 @@ namespace Integrador.Logica.UserServices
                     new SqlParameter("@correo", usuarioDTO.Correo),
                     new SqlParameter("@username", usuarioDTO.Username),
                     new SqlParameter("@psw", usuarioDTO.Psw),
-                    new SqlParameter("@celular", usuarioDTO.Celular)
+                    new SqlParameter("@celular", usuarioDTO.Celular),
+                    new SqlParameter("@RolUser", usuarioDTO.RolUser) // Asegúrate de incluir el parámetro @RolUser aquí
                 );
 
                 return true;
@@ -39,5 +40,7 @@ namespace Integrador.Logica.UserServices
                 return false;
             }
         }
+
     }
 }
+

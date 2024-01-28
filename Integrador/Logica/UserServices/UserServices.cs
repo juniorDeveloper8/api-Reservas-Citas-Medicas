@@ -32,7 +32,8 @@ namespace Integrador.Logica.UserServices
                     Correo = usuario.Correo,
                     Username = usuario.Username,
                     Psw = usuario.Psw,
-                    Celular = usuario.Celular
+                    Celular = usuario.Celular,
+                    RolUser = usuario.rolUser
                 };
                 usuariosDTO.Add(userDTO);
             }
@@ -87,7 +88,8 @@ namespace Integrador.Logica.UserServices
                 Correo = usuario.Correo,
                 Username = usuario.Username,
                 Psw = usuario.Psw,
-                Celular = usuario.Celular
+                Celular = usuario.Celular,
+                RolUser = usuario.rolUser
             }).ToList();
 
             return usuariosDTO;

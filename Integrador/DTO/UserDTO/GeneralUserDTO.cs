@@ -17,6 +17,7 @@
         public string Psw { get; set; } = null!;
 
         public string Celular { get; set; } = null!;
+        public int RolUser { get; set; }
     }
 
     public class USerDTOID

@@ -22,6 +22,7 @@ public partial class Usuario
     public string Psw { get; set; } = null!;
 
     public string Celular { get; set; } = null!;
+    public int rolUser { get; set; }
 
     public byte Estado { get; set; }
 
