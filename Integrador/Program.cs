@@ -1,6 +1,7 @@
 using Integrador.Persistencia;
 using Microsoft.EntityFrameworkCore;
 using Integrador.Logica.UserServices;
+using Integrador.Logica.ReservaServices;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -30,6 +31,12 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<InsertUserService>();
 builder.Services.AddScoped<UpdateUserService>();
+
+builder.Services.AddScoped<ListReservasService>();
+builder.Services.AddScoped<InsertReservaService>();
+builder.Services.AddScoped<UpdateReservaService>();
+builder.Services.AddScoped<DeleteReservaService>();
+
 /************************************************************/
 
 // Añadir el servicio de documentación de Swagger

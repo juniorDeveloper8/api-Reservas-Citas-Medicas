@@ -1,0 +1,141 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "DB_IntegradorContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Prueba",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Integrador",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[Clinica]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Clinica_Usuario]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[dotor_especialidad]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[especialidad]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ficha]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[logs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[reserva]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[rol]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TipoAtencion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[usuario]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ActualizarReserva]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ActualizarUsuario]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[DeleteReserva]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[InsertarReserva]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[InsertarUsuario]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ListarClinicas]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ListarDoctores]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ListarReserva]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ListarReservaPorID]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ListarReservas]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ListarTipoAtencion]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ListarUsuarioPorID]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ListarUsuarioPorNombreYCedula]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ListarUsuarios]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[LoginUsuario]",
+         "ObjectType": 1
+      }
+   ],
+   "UiHint": "rober\\msqlexpress.DB_Integrador.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

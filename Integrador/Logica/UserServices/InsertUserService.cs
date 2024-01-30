@@ -18,6 +18,7 @@ namespace Integrador.Logica.UserServices
         {
             try
             {
+                // var prueba= await _prueba.GetProcedures().;
                 // Llamar al procedimiento almacenado para insertar un nuevo usuario
                 await _context.Database.ExecuteSqlRawAsync(
                     "EXEC dbo.InsertarUsuario @nombre, @apellido, @tipoDocumento, @dni, @correo, @username, @psw, @celular, @RolUser", // Agrega @RolUser a la cadena de SQL

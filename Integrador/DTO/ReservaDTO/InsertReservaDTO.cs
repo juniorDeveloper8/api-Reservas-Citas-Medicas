@@ -20,12 +20,5 @@ namespace Integrador.DTO.ReservaDTO
 
         public int EspecialidadId { get; set; }
 
-        public virtual TipoAtencion At { get; set; } = null!;
-
-        public virtual Clinica Cli { get; set; } = null!;
-
-        public virtual Usuario Doc { get; set; } = null!;
-
-        public virtual Especialidad Especialidad { get; set; } = null!;
     }
 }
