@@ -12,6 +12,7 @@ namespace Integrador.Controllers
     public class ReservaController : ControllerBase
     {
         private readonly DbIntegradorContext _context;
+        //private readonly ListReservaXDNIService _reservasPorDNIService;
         private readonly ListReservasService _reservasService;
         private readonly InsertReservaService _insertReservaService;
         private readonly UpdateReservaService _updateReservaService;
@@ -24,6 +25,7 @@ namespace Integrador.Controllers
             _insertReservaService = insertReservaService;
             _updateReservaService = updateReservaService;
             _deleteReservaService = deleteReservaService;
+            //_reservasPorDNIService = reservasPorDNIService;
         }
 
         // GET: api/Reserva
@@ -39,6 +41,21 @@ namespace Integrador.Controllers
 
             return Ok(reservas);
         }
+
+        //// GET: api/Reserva/DNI/{dni}
+        //[HttpGet("{dni}")]
+        //public async Task<ActionResult<IEnumerable<ListarReservasPorDNIDTO>>> GetReservasPorDNI(int dni)
+        //{
+        //    var reservas = await _reservasPorDNIService.ListarReservasPorDNI(dni);
+
+        //    if (reservas == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(reservas);
+        //}
+
 
         // POST: api/Reserva
         [HttpPost]
