@@ -1,6 +1,5 @@
 ﻿using Integrador.DTO.UserDTO;
 using Integrador.Models;
-using Integrador.Persistencia; // Asegúrate de importar el contexto de Entity Framework
 using Microsoft.EntityFrameworkCore;
 
 namespace Integrador.Logica.UserServices
@@ -13,32 +12,30 @@ namespace Integrador.Logica.UserServices
         {
             _context = context;
         }
-
-        public async Task<List<GeneralUserDTO>> ListarUsuarios()
+        public async Task<List<ListPacienteDTO>> ListarUsuarios()
         {
-            // Llama al procedimiento almacenado y mapea los resultados a entidades Usuario
-            List<Usuario> usuarios = await _context.Usuarios.FromSqlInterpolated($"EXEC ListarUsuarios").ToListAsync();
+            // Llama al procedimiento almacenado para obtener los usuarios con rol igual a 2
+            var usuariosConRolDos = await _context.Usuarios
+                .FromSqlRaw($"EXEC ListarUsuarios")
+                .ToListAsync();
 
-            // Convierte las entidades Usuario a DTOs GeneralUserDTO
-            List<GeneralUserDTO> usuariosDTO = new List<GeneralUserDTO>();
-            foreach (var usuario in usuarios)
+            // Si no se encuentra ningún usuario con ese ID, devuelve null
+            if (usuariosConRolDos == null || usuariosConRolDos.Count == 0)
+                return null;
+
+            // Mapea los resultados a DTOs ListPacienteDTO
+            var listPacientesDTO = usuariosConRolDos.Select(u => new ListPacienteDTO
             {
-                GeneralUserDTO userDTO = new GeneralUserDTO
-                {
-                    Nombre = usuario.Nombre,
-                    Apellido = usuario.Apellido,
-                    TipoDocumento = usuario.TipoDocumento,
-                    Dni = usuario.Dni,
-                    Correo = usuario.Correo,
-                    Username = usuario.Username,
-                    Psw = usuario.Psw,
-                    Celular = usuario.Celular,
-                    RolUser = usuario.rolUser
-                };
-                usuariosDTO.Add(userDTO);
-            }
+                Nombre = u.Nombre,
+                Apellido = u.Apellido,
+                TipoDocumento = u.TipoDocumento,
+                Dni = u.Dni,
+                Correo = u.Correo,
+                Username = u.Username,
+                Celular = u.Celular
+            }).ToList();
 
-            return usuariosDTO;
+            return listPacientesDTO;
         }
 
         //obtener el usurio por id
@@ -88,8 +85,7 @@ namespace Integrador.Logica.UserServices
                 Correo = usuario.Correo,
                 Username = usuario.Username,
                 Psw = usuario.Psw,
-                Celular = usuario.Celular,
-                RolUser = usuario.rolUser
+                Celular = usuario.Celular
             }).ToList();
 
             return usuariosDTO;

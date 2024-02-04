@@ -1,9 +1,7 @@
-﻿using Integrador.Persistencia;
+﻿using Integrador.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Data;
-using System.Threading.Tasks;
 
 namespace Integrador.Logica.ReservaServices
 {

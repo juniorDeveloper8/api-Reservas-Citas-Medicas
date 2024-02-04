@@ -1,10 +1,7 @@
 ﻿using Integrador.DTO.ReservaDTO;
-using Integrador.Persistencia;
+using Integrador.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Threading.Tasks;
 
 namespace Integrador.Logica.ReservaServices
 {

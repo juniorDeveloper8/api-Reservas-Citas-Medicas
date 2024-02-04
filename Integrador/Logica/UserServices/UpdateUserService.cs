@@ -1,5 +1,5 @@
 ﻿using Integrador.DTO.UserDTO;
-using Integrador.Persistencia;
+using Integrador.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;

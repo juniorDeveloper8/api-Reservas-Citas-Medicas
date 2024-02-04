@@ -1,9 +1,7 @@
 ﻿using Integrador.DTO.FichaDTO;
-using Integrador.Persistencia;
+using Integrador.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Integrador.Logica.FichaServices
 {

@@ -1,6 +1,5 @@
 ﻿using Integrador.DTO.FichaDTO;
 using Integrador.Models;
-using Integrador.Persistencia;
 
 namespace Integrador.Logica.FichaServices
 {

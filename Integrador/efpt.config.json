@@ -7,7 +7,7 @@
    "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": null,
-   "OutputPath": "Prueba",
+   "OutputPath": "Models",
    "PreserveCasingWithRegex": true,
    "ProjectRootNamespace": "Integrador",
    "Schemas": null,
@@ -56,6 +56,14 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ActualizarClinicas]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[ActualizarEspecialidades]",
+         "ObjectType": 1
+      },
+      {
          "Name": "[dbo].[ActualizarReserva]",
          "ObjectType": 1
       },
@@ -64,7 +72,19 @@
          "ObjectType": 1
       },
       {
+         "Name": "[dbo].[deleteEspecialidad]",
+         "ObjectType": 1
+      },
+      {
          "Name": "[dbo].[DeleteReserva]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[insertarEspecialidad]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[InsertarFicha]",
          "ObjectType": 1
       },
       {
@@ -84,11 +104,15 @@
          "ObjectType": 1
       },
       {
+         "Name": "[dbo].[ListarEspecialidades]",
+         "ObjectType": 1
+      },
+      {
          "Name": "[dbo].[ListarReserva]",
          "ObjectType": 1
       },
       {
-         "Name": "[dbo].[ListarReservaPorID]",
+         "Name": "[dbo].[ListarReservaPorDNI]",
          "ObjectType": 1
       },
       {
@@ -109,10 +133,6 @@
       },
       {
          "Name": "[dbo].[ListarUsuarios]",
-         "ObjectType": 1
-      },
-      {
-         "Name": "[dbo].[LoginUsuario]",
          "ObjectType": 1
       }
    ],

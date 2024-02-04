@@ -1,8 +1,12 @@
-using Integrador.Persistencia;
-using Microsoft.EntityFrameworkCore;
-using Integrador.Logica.UserServices;
-using Integrador.Logica.ReservaServices;
+using Integrador.Logica;
+using Integrador.Logica.ClinicaService;
+using Integrador.Logica.DoctorService;
+using Integrador.Logica.EspecialidadService;
 using Integrador.Logica.FichaServices;
+using Integrador.Logica.ReservaServices;
+using Integrador.Logica.UserServices;
+using Integrador.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -26,6 +30,8 @@ builder.Services.AddCors(options =>
                           .AllowAnyMethod();
                       });
 });
+// Registrar DbIntegradorContextProcedures
+builder.Services.AddScoped<DbIntegradorContextProcedures>();
 
 // MIS SERVICIO
 /************************************************************/
@@ -39,9 +45,24 @@ builder.Services.AddScoped<InsertReservaService>();
 builder.Services.AddScoped<UpdateReservaService>();
 builder.Services.AddScoped<DeleteReservaService>();
 
+builder.Services.AddScoped<ListEspecialidadService>();
+builder.Services.AddScoped<InsertEspecialidadService>();
+builder.Services.AddScoped<UpdateEspecialidadService>();
+builder.Services.AddScoped<DeleteEspecialidadService>();
+
+builder.Services.AddScoped<ListDoctorService>();
+builder.Services.AddScoped<InsertDoctorService>();
+builder.Services.AddScoped<UpdateDoctorService>();
+builder.Services.AddScoped<DeleteDoctorService>();
+
+builder.Services.AddScoped<ListClinicaService>();
+builder.Services.AddScoped<UpdateClinicaService>();
+builder.Services.AddScoped<InsertClinicaService>();
+builder.Services.AddScoped<DeleteClinicaService>();
+
+//toca corregir
 builder.Services.AddScoped<ListFichaService>();
 builder.Services.AddScoped<InsertFichaService>();
-
 /************************************************************/
 
 

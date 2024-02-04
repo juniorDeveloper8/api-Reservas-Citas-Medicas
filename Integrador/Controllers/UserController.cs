@@ -21,7 +21,7 @@ namespace Integrador.Controllers
 
         // GET: api/Usuario
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GeneralUserDTO>>> ListarUsuarios()
+        public async Task<ActionResult<IEnumerable<ListPacienteDTO>>> ListarUsuarios()
         {
             var usuarios = await _userServices.ListarUsuarios();
 
@@ -32,6 +32,7 @@ namespace Integrador.Controllers
 
             return Ok(usuarios);
         }
+
 
         // GET: api/Usuario/{id}
         [HttpGet("{id}")]
