@@ -7,7 +7,7 @@
         public string ClinicaNombre { get; set; }
         public string Direccion { get; set; }
         public string Ruc { get; set; }
-        public byte Estado { get; set; }
+        //public byte Estado { get; set; }
     }
     public class CrearClinicaDTO
     {

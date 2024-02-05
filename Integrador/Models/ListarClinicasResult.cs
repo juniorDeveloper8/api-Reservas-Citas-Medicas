@@ -11,5 +11,8 @@ namespace Integrador.Models
         public string Clinica_nombre { get; set; }
         public string direccion { get; set; }
         public string ruc { get; set; }
+
+        public byte estado { get; set; }
+
     }
 }
